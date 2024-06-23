@@ -3,7 +3,6 @@ import { isUnwanted } from "./unwanted";
 import { isInvisible } from "./invisible";
 
 const keepAttributes = ["href", "id", "src", "colspan", "rowspan"];
-const forbiddenTags = ["script", "nav", "footer", "aside"];
 const allowedEmptyTags = ["img", "svg", "br", "hr", "iframe"];
 const contentTags = [
   "h1",
@@ -80,8 +79,6 @@ const cleanNode = (elem: HTMLElement, baseUrl: string, level: number) => {
 
   // Remove attributes(most of them)
   if (elem.tagName !== "SVG") { // TODO: remove SVGs without dimensions?
-    return;
-
     // TODO: There are other elems that need to keep attrs?
     const attrs = elem.getAttributeNames();
     attrs.forEach((attr: string) => {
@@ -143,12 +140,6 @@ const checkNode = (root: HTMLElement, baseUrl: string, level = 0): string => {
   const tagName = root.tagName.toLowerCase();
   console.log(`${indent(level)} Extractor.checkNode: checking`, logElem(root));
 
-  // Forbidden node
-  if (forbiddenTags.indexOf(tagName) >= 0) {
-    console.log("Extractor.checkNode: node is forbidden");
-    return "";
-  }
-
   // Invisible node
   if (isInvisible(root)) {
     console.log("Extractor.checkNode: node is invisible");
@@ -157,6 +148,7 @@ const checkNode = (root: HTMLElement, baseUrl: string, level = 0): string => {
 
   // Unwanted stuff
   if (isUnwanted(root)) {
+    console.log("Extractor.checkNode: node is unwanted stuff");
     return "";
   }
 

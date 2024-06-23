@@ -1,6 +1,7 @@
 import { HTMLElement } from "linkedom";
 
 const allowedElems = ["body", "svg"];
+const forbiddenTags = ["script", "nav", "footer", "aside"];
 const unwantedStuff = [
   ["role", "button"],
   ["class", "js-"],
@@ -30,7 +31,10 @@ const unwantedStuff = [
 
 // Remove elements based on unwanted classnames or other attribute/values combos
 export const isUnwanted = (element: HTMLElement) => {
-  if (allowedElems.indexOf(element.tagName.toLowerCase()) >= 0) return false; // FUCK YOU
+  const tagName = element.tagName.toLowerCase();
+
+  if (forbiddenTags.indexOf(tagName) >= 0) return true; // FUCK YOU 
+  if (allowedElems.indexOf(tagName) >= 0) return false;
 
   let unwanted = false;
 
